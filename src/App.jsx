@@ -1,3 +1,4 @@
+import Main from "./components/Main";
 import Navbar from "./components/Navbar";
 
 const tempMovieData = [
@@ -50,6 +51,7 @@ const App = () => {
   return (
     <>
       <Navbar movies={tempMovieData}/>
+      <Main allMovies={tempMovieData} tempWatchedData={tempWatchedData}/>
     </>
   )
 }
