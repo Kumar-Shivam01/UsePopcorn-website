@@ -16,6 +16,7 @@ const textStyle = {
 const StarRating = ({ maxRating = 5 }) => {
   //default value of maxRating will be 5 if no value for maxRatings is provided in the props
   const [rating, setRating] = useState(0);
+  const [tempRating,setTemprating] = useState(0);
   function handleRating(rating) {
     setRating(rating);
   }
@@ -23,10 +24,10 @@ const StarRating = ({ maxRating = 5 }) => {
     <div style={containerStyle}>
       <div style={startContainerStyle}>
         {Array.from({ length: maxRating }, (_, i) => (
-          <Star key={i} onRate={() => handleRating(i + 1)} full={rating>=i+1   }/>
+          <Star key={i} onRate={() => handleRating(i + 1)} full={tempRating?tempRating>=i+1 : rating>=i+1} onHoverIn={()=>setTemprating(i+1)} onHoverOut={()=>{setTemprating(0)}}/>
         ))}
       </div>
-      <p style={textStyle}>{rating || ""}</p>
+      <p style={textStyle}>{tempRating || ""}</p>
     </div>
   );
 };
@@ -36,9 +37,9 @@ const starStyle = {
   display: "block",
   cursor: "pointer",
 };
-function Star({ onRate, full }) {
+function Star({ onRate, full, onHoverIn, onHoverOut }) {
   return (
-    <span role="button" style={starStyle} onClick={onRate}>
+    <span role="button" style={starStyle} onClick={onRate} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut }>
       {full ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
