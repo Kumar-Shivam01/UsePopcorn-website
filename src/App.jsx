@@ -1,5 +1,7 @@
+import ListBox from "./components/ListBox";
 import Main from "./components/Main";
 import Navbar from "./components/Navbar";
+import WatchedBox from "./components/WatchedBox";
 
 const tempMovieData = [
   {
@@ -51,7 +53,10 @@ const App = () => {
   return (
     <>
       <Navbar movies={tempMovieData}/>
-      <Main allMovies={tempMovieData} tempWatchedData={tempWatchedData}/>
+      <Main>
+        <ListBox allMovies={tempMovieData}/>
+        <WatchedBox tempWatchedData={tempWatchedData}/>
+      </Main>
     </>
   )
 }

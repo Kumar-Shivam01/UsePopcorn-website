@@ -18,7 +18,7 @@ function WatchedBox({tempWatchedData}) {
           <Summary watched={watched} setWatched={setWatched}/>
           <ul className="list">
             {watched.map((movie) => (
-              <WatchedMovie movie={movie}/>
+              <WatchedMovie movie={movie} key={movie.imdbID}/>
             ))}
           </ul>
         </>

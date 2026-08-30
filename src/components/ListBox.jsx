@@ -13,7 +13,7 @@ function ListBox({allMovies}) {
       {isOpenAll && (
         <ul className="list">
           {allMovies?.map((movie) => (
-            <Movie movie={movie} />
+            <Movie movie={movie} key={movie.imdbID}/>
           ))}
         </ul>
       )}
