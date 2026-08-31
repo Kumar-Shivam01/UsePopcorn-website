@@ -18,5 +18,6 @@ createRoot(document.getElementById('root')).render(
     <StarRating maxRating={5} className='test' messages={["Terrible","Bad","Okay","Good","Amazing"]}/>
     <StarRating size={24} color='red' className='test' defaultRating={3}/>
     <Test/>
+    {/* <App/> */}
   </StrictMode>,
 )
