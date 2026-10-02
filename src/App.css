@@ -54,8 +54,10 @@ body {
   max-width: 42rem;
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
-  /* overflow: scroll; */
+  overflow-y: auto;
   position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
 }
 
 .loader {
@@ -143,6 +145,7 @@ body {
 
 .list-watched {
   height: calc(100% - 9rem);
+  overflow-y: auto;
 }
 
 .list li {
