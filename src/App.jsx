@@ -55,12 +55,14 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error,setError] = useState('')
+  const [query,setQuery] = useState('')
   useEffect(function () {
     async function fetchMovies() {
       try {
+        setError('')
         setIsLoading(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=interstellar`,
+          `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=${query}`,
         );
         if (!res.ok)
           throw new Error("Something went wrong with fetching movies.");
@@ -76,10 +78,10 @@ const App = () => {
       }
     }
     fetchMovies();
-  }, []);
+  }, [query]);
   return (
     <>
-      <Navbar movies={movies} />
+      <Navbar movies={movies} query={query} setQuery={setQuery} />
       <Main>
         {isLoading && <Loader/>}
         {!isLoading && !error && <ListBox allMovies={movies}/>}
