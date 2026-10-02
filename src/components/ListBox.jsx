@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Movie from "./Movie";
-function ListBox({allMovies}) {
+function ListBox({allMovies,onSelectMovie}) {
     const [isOpenAll, setIsOpenAll] = useState(true);
   return (
     <div className="box">
@@ -11,9 +11,9 @@ function ListBox({allMovies}) {
         {isOpenAll ? "-" : "+"}
       </button>
       {isOpenAll && (
-        <ul className="list">
+        <ul className="list list-movies">
           {allMovies?.map((movie) => (
-            <Movie movie={movie} key={movie.imdbID}/>
+            <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie}/>
           ))}
         </ul>
       )}
