@@ -52,34 +52,51 @@ const tempWatchedData = [
   },
 ];
 const App = () => {
-  const [movies,setMovies] = useState([])
-  const [isLoading,setIsLoading] = useState(false)
-
-  useEffect(function(){
-    async function fetchMovies(){
-      setIsLoading(true)
-      const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=interstellar`,
-  )
-    const data = await res.json()
-    setMovies(data.Search)
-    setIsLoading(false)
-  }
-  fetchMovies()
-  } ,[])
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error,setError] = useState('')
+  useEffect(function () {
+    async function fetchMovies() {
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=interstellar`,
+        );
+        if (!res.ok)
+          throw new Error("Something went wrong with fetching movies.");
+        const data = await res.json();
+        if(data.Response === 'false') throw new Error('Movie not found')
+        setMovies(data.Search);
+        console.log(data)
+      } catch (err) {
+        console.log(err.message);
+        setError(err.message)
+      } finally{
+        setIsLoading(false);
+      }
+    }
+    fetchMovies();
+  }, []);
   return (
     <>
       <Navbar movies={movies} />
       <Main>
-        {isLoading ? <Loader/>:<ListBox allMovies={movies} />}
+        {isLoading && <Loader/>}
+        {!isLoading && !error && <ListBox allMovies={movies}/>}
+        {error && <ErrorMessage message={error}/>}
         <WatchedBox tempWatchedData={tempWatchedData} />
       </Main>
     </>
   );
 };
-function Loader(){
+function Loader() {
+  return <p className="loader">Loading...</p>;
+}
+function ErrorMessage({message}){
   return(
-    <p className="loader">Loading...</p>
+    <p className="error">
+      <span>X</span> {message}
+    </p>
   )
 }
 
