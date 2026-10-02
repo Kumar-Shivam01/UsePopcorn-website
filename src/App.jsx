@@ -53,14 +53,17 @@ const tempWatchedData = [
 ];
 const App = () => {
   const [movies,setMovies] = useState([])
+  const [isLoading,setIsLoading] = useState(false)
+
   useEffect(function(){
     async function fetchMovies(){
+      setIsLoading(true)
       const res = await fetch(
     `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=interstellar`,
   )
     const data = await res.json()
     setMovies(data.Search)
-    console.log(data.Search)
+    setIsLoading(false)
   }
   fetchMovies()
   } ,[])
@@ -68,11 +71,16 @@ const App = () => {
     <>
       <Navbar movies={movies} />
       <Main>
-        <ListBox allMovies={movies} />
+        {isLoading ? <Loader/>:<ListBox allMovies={movies} />}
         <WatchedBox tempWatchedData={tempWatchedData} />
       </Main>
     </>
   );
 };
+function Loader(){
+  return(
+    <p className="loader">Loading...</p>
+  )
+}
 
 export default App;
