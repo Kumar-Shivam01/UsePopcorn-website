@@ -4,6 +4,7 @@ import Main from "./components/Main";
 import Navbar from "./components/Navbar";
 import WatchedBox from "./components/WatchedBox";
 import { useState } from "react";
+import SelectedMovie from "./components/SelectedMovie";
 
 // const tempMovieData = [
 //   {
@@ -56,6 +57,13 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error,setError] = useState('')
   const [query,setQuery] = useState('')
+  const [selectedId,setSelectedId] = useState(null)
+  function handleSelectedMovie(id){
+    setSelectedId((selectedId) => (id === selectedId? null : id))
+  }
+  function handleClosedMovie(){
+    setSelectedId(null)
+  }
   useEffect(function () {
     async function fetchMovies() {
       try {
@@ -84,9 +92,11 @@ const App = () => {
       <Navbar movies={movies} query={query} setQuery={setQuery} />
       <Main>
         {isLoading && <Loader/>}
-        {!isLoading && !error && <ListBox allMovies={movies}/>}
+        {!isLoading && !error && <ListBox allMovies={movies} onSelectMovie={handleSelectedMovie}/>}
         {error && <ErrorMessage message={error}/>}
-        <WatchedBox tempWatchedData={tempWatchedData} />
+        {
+          selectedId ? <SelectedMovie selectedId={selectedId} onCloseMovie={handleClosedMovie}/> : <WatchedBox tempWatchedData={tempWatchedData} />
+        }
       </Main>
     </>
   );
