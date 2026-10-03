@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import ListBox from "./components/ListBox";
 import Main from "./components/Main";
 import Navbar from "./components/Navbar";
+import Loader from "./components/Loader";
 import WatchedBox from "./components/WatchedBox";
 import { useState } from "react";
 import SelectedMovie from "./components/SelectedMovie";
@@ -70,7 +71,7 @@ const App = () => {
         setError('')
         setIsLoading(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=${query}`,
+          `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=${query}`
         );
         if (!res.ok)
           throw new Error("Something went wrong with fetching movies.");
@@ -101,13 +102,10 @@ const App = () => {
     </>
   );
 };
-function Loader() {
-  return <p className="loader">Loading...</p>;
-}
 function ErrorMessage({message}){
   return(
     <p className="error">
-      <span>X</span> {message}
+      <span>🚨</span> {message}
     </p>
   )
 }
