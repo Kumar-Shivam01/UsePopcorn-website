@@ -49,10 +49,14 @@ const SelectedMovie = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
         setMovie(data);
         setIsLoading(false);
       }
-      getMovieDetails();
+      getMovieDetails(); 
     },
     [selectedId],
   );
+  useEffect(function(){
+      document.title = `Movie | ${title}`
+      return ()=>document.title = 'usePopcorn'
+  },[title])
   return (
     <div className="details">
       {isLoading ? (
