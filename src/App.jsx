@@ -52,6 +52,12 @@ const App = () => {
         setIsLoading(false);
       }
     }
+    if(query.length < 3){
+      setMovies([])
+      setError("")
+      return
+    }
+    handleClosedMovie()
     fetchMovies();
     return function(){
       controller.abort() // if the query changes 

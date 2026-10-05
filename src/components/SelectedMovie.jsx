@@ -9,8 +9,8 @@ const SelectedMovie = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
   const [userRating, setUserRating] = useState('')
 
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId)
-  const watchedUserRating = watched.find((movie)=>movie.imdbID === selectedId)?.userRating; // find the movie in the watched list
-  
+  const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.userRating; // find the movie in the watched list
+
   const {
     Title: title,
     Year: year,
@@ -37,6 +37,21 @@ const SelectedMovie = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     onAddWatched(newWatchedMovie)
     onCloseMovie(true)
   }
+
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === 'Escape') {
+          onCloseMovie();
+          console.log('closing movie')
+        }
+      }
+    document.addEventListener('keydown', callback)
+    return function(){
+      document.removeEventListener('keydown',callback)
+    }
+  }, [])
+
   useEffect(
     function () {
       async function getMovieDetails() {
@@ -45,18 +60,17 @@ const SelectedMovie = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
           `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&i=${selectedId}`,
         );
         const data = await res.json();
-        console.log(data);
         setMovie(data);
         setIsLoading(false);
       }
-      getMovieDetails(); 
+      getMovieDetails();
     },
     [selectedId],
   );
-  useEffect(function(){
-      document.title = `Movie | ${title}`
-      return ()=>document.title = 'usePopcorn'
-  },[title])
+  useEffect(function () {
+    document.title = `Movie | ${title}`
+    return () => document.title = 'usePopcorn'
+  }, [title])
   return (
     <div className="details">
       {isLoading ? (
@@ -81,14 +95,14 @@ const SelectedMovie = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
           </header>
           <section>
             <div className="rating">
-              {!isWatched ? 
-              (
-              <>
-              <StarRating maxRating={10} size={24} onSetRating={setUserRating} />
-              {userRating > 0 && (<button className="btn-add" onClick={handleAdd}>+ Add to list</button>)}
-              </>
-              ) : 
-              <p>You rated this movie {watchedUserRating}<span>⭐</span></p>
+              {!isWatched ?
+                (
+                  <>
+                    <StarRating maxRating={10} size={24} onSetRating={setUserRating} />
+                    {userRating > 0 && (<button className="btn-add" onClick={handleAdd}>+ Add to list</button>)}
+                  </>
+                ) :
+                <p>You rated this movie {watchedUserRating}<span>⭐</span></p>
               }
             </div>
             <p>
