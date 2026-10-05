@@ -1,10 +1,8 @@
 import { useState } from "react";
 import WatchedMovie from "./WatchedMovie";
 import Summary from "./Summary";
-function WatchedBox({tempWatchedData}) {
+function WatchedBox({watched}) {
   const [isOpenWatched, setIsOpenWatched] = useState(true);
-  const [watched, setWatched] = useState(tempWatchedData);
- 
   return (
     <div className="box">
       <button
@@ -15,10 +13,10 @@ function WatchedBox({tempWatchedData}) {
       </button>
       {isOpenWatched && (
         <>
-          <Summary watched={watched} setWatched={setWatched}/>
+          <Summary watched={watched}/>
           <ul className="list">
             {watched.map((movie) => (
-              <WatchedMovie movie={movie} key={movie.imdbID}/>
+              <WatchedMovie movie={movie}/>
             ))}
           </ul>
         </>
