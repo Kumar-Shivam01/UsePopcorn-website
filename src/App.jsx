@@ -13,7 +13,12 @@ const App = () => {
   const [error,setError] = useState('')
   const [query,setQuery] = useState('')
   const [selectedId,setSelectedId] = useState(null)
-  const [watched, setWatched] = useState([]);
+
+  //const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function(){ //passing a function to useState is called lazy initialization,this fxn must be a pure fxn receiving no arguments.
+    const storedValue = localStorage.getItem('watched') //React calls that function only once, on the first render (mount), and uses its return value as the initial state. On every later re-render, React ignores it.
+    return JSON.parse(storedValue)
+  });
 
   function handleAddWatched(movie){
       setWatched(watched => [...watched,movie])
@@ -27,6 +32,10 @@ const App = () => {
   function handleDeleteWatched(id){
     setWatched(watched => watched.filter((movie)=>movie.imdbID !== id))
   }
+  useEffect(function(){ //This effect runs after render whenever watched changes (and once on mount). It writes the current state into localStorage as a JSON string, since localStorage can only store strings.
+    localStorage.setItem('watched',JSON.stringify(watched))
+  },[watched])
+
   useEffect(function () {
     const controller = new AbortController(); // to stop the previous request
     async function fetchMovies() {
