@@ -1,5 +1,10 @@
+import { useEffect, useState } from 'react';
 import '../App.css'
 const Navbar = ({movies,query,setQuery}) => {
+  useEffect(function(){
+    const el = document.querySelector('.search')
+    el.focus()
+  },[])
   let length;
   movies === undefined ? length = 0:length = movies.length
   return (
