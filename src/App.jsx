@@ -6,14 +6,12 @@ import Loader from "./components/Loader";
 import WatchedBox from "./components/WatchedBox";
 import { useState } from "react";
 import SelectedMovie from "./components/SelectedMovie";
-
+import { useMovies } from "./useMovies";
 const App = () => {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error,setError] = useState('')
   const [query,setQuery] = useState('')
   const [selectedId,setSelectedId] = useState(null)
 
+  const { movies,isLoading,error } = useMovies(query,handleClosedMovie)
   //const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(function(){ //passing a function to useState is called lazy initialization,this fxn must be a pure fxn receiving no arguments.
     const storedValue = localStorage.getItem('watched') //React calls that function only once, on the first render (mount), and uses its return value as the initial state. On every later re-render, React ignores it.
@@ -36,42 +34,6 @@ const App = () => {
     localStorage.setItem('watched',JSON.stringify(watched))
   },[watched])
 
-  useEffect(function () {
-    const controller = new AbortController(); // to stop the previous request
-    async function fetchMovies() {
-      try {
-        setError('')
-        setIsLoading(true);
-        const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${import.meta.env.VITE_OMDB_API_KEY}&s=${query}`,
-          {signal: controller.signal}
-        );
-        if (!res.ok)
-          throw new Error("Something went wrong with fetching movies.");
-        const data = await res.json();
-        if(data.Response === 'false') throw new Error('Movie not found')
-        setMovies(data.Search);
-        setError("")
-      } catch (err) {
-        console.log(err.message);
-        if(err.name !== 'AbortError'){
-          setError(err.message)
-        }
-      } finally{
-        setIsLoading(false);
-      }
-    }
-    if(query.length < 3){
-      setMovies([])
-      setError("")
-      return
-    }
-    handleClosedMovie()
-    fetchMovies();
-    return function(){
-      controller.abort() // if the query changes 
-    }
-  }, [query]);
   return (
     <>
       <Navbar movies={movies} query={query} setQuery={setQuery} />
