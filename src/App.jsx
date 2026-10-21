@@ -11,7 +11,7 @@ const App = () => {
   const [query,setQuery] = useState('')
   const [selectedId,setSelectedId] = useState(null)
 
-  const { movies,isLoading,error } = useMovies(query,handleClosedMovie)
+  const { movies,isLoading,error } = useMovies(query)
   //const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(function(){ //passing a function to useState is called lazy initialization,this fxn must be a pure fxn receiving no arguments.
     const storedValue = localStorage.getItem('watched') //React calls that function only once, on the first render (mount), and uses its return value as the initial state. On every later re-render, React ignores it.

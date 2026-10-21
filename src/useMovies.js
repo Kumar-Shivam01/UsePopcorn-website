@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 
-export function useMovies(query,callback) {
+export function useMovies(query) {
     const [movies, setMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error,setError] = useState('')
 
     useEffect(function () {
-        callback?.() //call this function only if it exists
         const controller = new AbortController(); // to stop the previous request
         async function fetchMovies() {
             try {
